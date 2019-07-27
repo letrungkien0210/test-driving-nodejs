@@ -99,4 +99,47 @@ describe('Stockfetch tests', function() {
         stockfetch.processTickers(['A', 'B', 'C']);
         expect(stockfetch.tickersCount).to.be.eql(3);
     })
+
+    it('getPrice should call get on http with valid URL',  function(done) {
+        const httpSub = sandbox.stub(stockfetch.http, 'get', function(url) {
+            expect(url).to.be.eql('http://ichart.finance.yahoo.com/table.csv?s=GOOG');
+            done();
+            return { on: function() {}};
+        })
+
+        stockfetch.getPrice('GOOG');
+    })
+
+    it('getPrice should send a response handler to get', function(done) {
+        const aHandler = function() {};
+
+        sandbox.stub(stockfetch.processResponse, 'bind')
+        .withArgs(stockfetch, 'GOOG')
+        .returns(aHandler);
+
+        const httpStub = sandbox.stub(stockfetch.http, 'get', function(url, handler) {
+            expect(handler).to.be.eql(aHandler);
+            done();
+            return { on: function() {}};
+        });
+
+        stockfetch.getPrice('GOOG');
+    })
+
+    it('getPrice should register handler for failure to reach host', function(done) {
+        const errorHandler = function() {};
+
+        sandbox.stub(stockfetch.processHttpError, 'bind')
+            .withArgs(stockfetch, 'GOOG')
+            .returns(errorHandler);
+
+        const onStub = function(event, handler) {
+            expect(event).to.be.eql('error');
+            expect(handler).to.be.eql(errorHandler);
+        }
+
+        sandbox.stub(stockfetch.http, 'get').returns({ on: onStub});
+
+        stockfetch.getPrice('GOOG');
+    })
 });
