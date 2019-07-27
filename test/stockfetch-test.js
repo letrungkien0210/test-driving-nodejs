@@ -136,6 +136,7 @@ describe('Stockfetch tests', function() {
         const onStub = function(event, handler) {
             expect(event).to.be.eql('error');
             expect(handler).to.be.eql(errorHandler);
+            done();
         }
 
         sandbox.stub(stockfetch.http, 'get').returns({ on: onStub});
