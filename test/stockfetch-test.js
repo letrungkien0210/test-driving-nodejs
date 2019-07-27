@@ -157,7 +157,7 @@ describe('Stockfetch tests', function() {
         }
 
         const parsePriceMock = sandbox.mock(stockfetch)
-            .expect('parsePrice').withArgs('GOOG', 'some data');
+            .expects('parsePrice').withArgs('GOOG', 'some data');
 
         stockfetch.processResponse('GOOG', response);
         dataFunction('some ');
@@ -184,7 +184,7 @@ describe('Stockfetch tests', function() {
             on: function () {}
         }
 
-        const processErrorMock = sandbox.mocl(stockfetch)
+        const processErrorMock = sandbox.mock(stockfetch)
         .expects('processError')
         .never();
 
