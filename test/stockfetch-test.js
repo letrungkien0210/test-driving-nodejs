@@ -244,4 +244,27 @@ describe('Stockfetch tests', function() {
         stockfetch.printReport();
         callbackMock.verify();
     })
+
+    it('printreport should call sortData once for prices, once for errors', function() {
+        stockfetch.prices = { 'GOOG': 12.34 };
+        stockfetch.errors = { 'AAPPL': 'error' };
+        stockfetch.tickersCount = 2;
+
+        const mock = sandbox.mock(stockfetch);
+        mock.expect('sortData').withArgs(stockfetch.prices);
+        mock.export('sortData').withArgs(stockfetch.erorrs);
+
+        stockfetch.printReport();
+        mock.verify();
+    })
+
+    it('sortData should srot the data based on the symbols', function() {
+        const dataToSort = {
+            'GOOG': 1.2,
+            'AAPL': 2.1
+        };
+
+        const result = stockfetch.sortData(dataToSort);
+        expect(result).to.be.eql([['AAPL', 2.1], ['GOOG', 1.2]]);
+    })
 });
