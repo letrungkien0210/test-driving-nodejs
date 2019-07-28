@@ -219,4 +219,29 @@ describe('Stockfetch tests', function() {
         stockfetch.processError('GOOG', '...oops...');
         printReportMock.verify();
     })
+
+    it('printReport should send price, errors once all response arrive', function () {
+        stockfetch.prices = { 'GOOG': 12.34 };
+        stockfetch.errors = { 'AAPL': 'error' };
+
+        const callbackMock = sandbox.mock(stockfetch)
+        .expects('reportCallback')
+        .withArgs([['GOOG', 12.34]], [['AAPL', 'error']])
+
+        stockfetch.printReport();
+        callbackMock.verify();
+    })
+
+    it('printReport should not send before all responses arrive', function() {
+        stockfetch.prices = { 'GOOG': 12.34 };
+        stockfetch.errors = { 'AAPL': 'error' };
+        stockfetch.tickersCount = 3;
+
+        const callbackMock = sandbox.mock(stockfetch)
+        .expects('reportCallback')
+        .never();
+
+        stockfetch.printReport();
+        callbackMock.verify();
+    })
 });
