@@ -197,7 +197,7 @@ describe('Stockfetch tests', function() {
     it('parsePrice should update prices', function() {
         stockfetch.parsePrice('GOOG', data);
 
-        expect(stockfetch.prices.GOOG).to.be.equal('625.7702');
+        expect(stockfetch.prices.GOOG).to.be.equal('625.77002');
     })
 
     it('parsePrice should call printReport', function() {
@@ -216,7 +216,7 @@ describe('Stockfetch tests', function() {
     it('processError should call printReport', function() {
         const printReportMock = sandbox.mock(stockfetch).expects('printReport');
 
-        stockfetch.processerror('GOOG', '...oops...');
+        stockfetch.processError('GOOG', '...oops...');
         printReportMock.verify();
     })
 });
