@@ -223,6 +223,7 @@ describe('Stockfetch tests', function() {
     it('printReport should send price, errors once all response arrive', function () {
         stockfetch.prices = { 'GOOG': 12.34 };
         stockfetch.errors = { 'AAPL': 'error' };
+        stockfetch.tickersCount = 2;
 
         const callbackMock = sandbox.mock(stockfetch)
         .expects('reportCallback')
@@ -245,14 +246,14 @@ describe('Stockfetch tests', function() {
         callbackMock.verify();
     })
 
-    it('printreport should call sortData once for prices, once for errors', function() {
+    it('printReport should call sortData once for prices, once for errors', function() {
         stockfetch.prices = { 'GOOG': 12.34 };
         stockfetch.errors = { 'AAPPL': 'error' };
         stockfetch.tickersCount = 2;
 
         const mock = sandbox.mock(stockfetch);
-        mock.expect('sortData').withArgs(stockfetch.prices);
-        mock.export('sortData').withArgs(stockfetch.erorrs);
+        mock.expects('sortData').withArgs(stockfetch.prices);
+        mock.expects('sortData').withArgs(stockfetch.errors);
 
         stockfetch.printReport();
         mock.verify();
