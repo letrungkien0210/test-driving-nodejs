@@ -7,6 +7,12 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Run the stockfetch standalone",
+            "program": "${workspaceFolder}/spike/index.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Mocha Tests",
             "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
             "args": [
